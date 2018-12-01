@@ -2,7 +2,6 @@ package com.himanshurawat.imageworker
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.media.Image
 import android.os.Environment
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.PermissionChecker
@@ -10,7 +9,6 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
-import java.lang.Exception
 import java.lang.NullPointerException
 
 class ImageWorker(private var context: Context) {
@@ -26,7 +24,7 @@ class ImageWorker(private var context: Context) {
     //Setting Up Directory
     fun setDirectory(s: String?): ImageWorker{
 
-        if (s!= null && s.trim().isNotEmpty()) {
+        if(s!= null && s.trim().isNotEmpty()){
             val directoryString = s.replace(" ", "")
             directory = directoryString
         }else{
@@ -96,9 +94,9 @@ class ImageWorker(private var context: Context) {
         if(fileExtension == null){
             throw NullPointerException("File Extension Null. Use setFileExtension() Method")
         }
-//        if(bitmap == null){
-//            throw NullPointerException("Bitmap Null. Use setBitmap() Method")
-//        }
+        if(bitmap == null){
+            throw NullPointerException("Bitmap Null. Use setBitmap() Method")
+        }
         if(fileName == null){
             throw NullPointerException("File Name Null. Use setFileName() Method")
         }
@@ -109,8 +107,9 @@ class ImageWorker(private var context: Context) {
 
 
         val dir = if(subDirectory == null)
-            File("${Environment.getExternalStorageDirectory().absolutePath}/$directory")else
-            File("${Environment.getExternalStorageDirectory().absolutePath}/$directory/$subDirectory")
+                File("${Environment.getExternalStorageDirectory().absolutePath}/$directory")
+            else
+                File("${Environment.getExternalStorageDirectory().absolutePath}/$directory/$subDirectory")
 
         //Create Directory If Doesn't Exist
         if(!dir.exists()){
