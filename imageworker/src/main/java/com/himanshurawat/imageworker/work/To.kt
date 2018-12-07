@@ -3,6 +3,7 @@ package com.himanshurawat.imageworker.work
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.os.Environment
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.PermissionChecker
@@ -143,7 +144,7 @@ class To(private val context: Context) {
     fun save(base64: String?,quality: Int? = 100){
 
         if(quality == null || quality < 1 && quality <= 100){
-            throw java.lang.IllegalArgumentException("Bitmap Quality must be between 1 to 100")
+            throw java.lang.IllegalArgumentException("Quality must be between 1 to 100")
         }
 
         if(base64 == null || base64.isEmpty()){
@@ -206,6 +207,15 @@ class To(private val context: Context) {
             e.printStackTrace()
         }
 
+    }
+
+    fun save(drawable: Drawable?, quality: Int? = 100){
+        if(quality == null || quality < 1 && quality <= 100){
+            throw java.lang.IllegalArgumentException("Quality must be between 1 to 100")
+        }
+        if(drawable == null){
+            throw java.lang.IllegalArgumentException("Drawable cannot be Null")
+        }
     }
 
 

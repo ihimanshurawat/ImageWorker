@@ -30,6 +30,10 @@ class MainActivity : AppCompatActivity() {
         })
 
 
+        imageView.setImageBitmap(ImageWorker.from(this).directory("ImageWorker").
+            subDirectory("Gamer").
+            setFileName("Awesome").
+            withExtension(Extension.PNG).load())
 
 
     }
@@ -38,12 +42,6 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageBitmap = data?.extras?.get("data") as Bitmap
 
-            ImageWorker.
-                to(this).directory("ImageWorker").
-                subDirectory("Gamer").
-                setFileName("Awesome").
-                withExtension(Extension.PNG).
-                save("",100)
 
         }
     }
