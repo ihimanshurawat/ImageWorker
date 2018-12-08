@@ -1,5 +1,6 @@
 package com.himanshurawat.imageworkersample
 
+import android.app.usage.UsageStats
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -36,15 +37,27 @@ class MainActivity : AppCompatActivity() {
             withExtension(Extension.PNG).load())
 
 
+
+
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageBitmap = data?.extras?.get("data") as Bitmap
 
+            ImageWorker.to(this).
+                directory("Image").
+                subDirectory("Drawable").
+                setFileName("1").
+                withExtension(Extension.PNG).
+                save(ContextCompat.getDrawable(this,R.drawable.ic_launcher_foreground))
+
 
         }
     }
+
+
 
 
 

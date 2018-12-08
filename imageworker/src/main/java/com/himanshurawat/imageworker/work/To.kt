@@ -216,6 +216,64 @@ class To(private val context: Context) {
         if(drawable == null){
             throw java.lang.IllegalArgumentException("Drawable cannot be Null")
         }
+
+        val bitmap = ImageWorker.convert().drawableToBitmap(drawable)
+
+        if(bitmap == null){
+            throw NullPointerException("Decoding Base64 String results in Null Bitmap")
+        }
+
+
+        if(fileExtension == null){
+            throw NullPointerException("File Extension Null. Use setFileExtension() Method")
+        }
+
+        if(fileName == null){
+            throw NullPointerException("File Name Null. Use setFileName() Method")
+        }
+
+        if(!writePermissionGranted()){
+            throw SecurityException("Write External Storage Permission Not Granted")
+        }
+
+        val dir = if(subDirectory == null)
+            File("${Environment.getExternalStorageDirectory().absolutePath}/$directory")
+        else
+            File("${Environment.getExternalStorageDirectory().absolutePath}/$directory/$subDirectory")
+
+        //Create Directory If Doesn't Exist
+        if(!dir.exists()){
+            dir.mkdirs()
+        }
+
+        val file = File(dir,"$fileName$fileExtension")
+
+        val outStream: FileOutputStream
+
+        try{
+
+            outStream = FileOutputStream(file)
+
+            if(fileExtension!!.equals(".png",true)){
+                bitmap.compress(Bitmap.CompressFormat.PNG,quality,outStream)
+            }
+            if(fileExtension!!.equals(".jpeg",true)){
+                bitmap.compress(Bitmap.CompressFormat.PNG,quality,outStream)
+            }
+            if(fileExtension!!.equals(".webp",true)){
+                bitmap.compress(Bitmap.CompressFormat.PNG,quality,outStream)
+            }
+
+            outStream.flush()
+            outStream.close()
+        }catch (e: FileNotFoundException){
+            e.printStackTrace()
+        }
+        catch (e : IOException){
+            e.printStackTrace()
+        }
+
+
     }
 
 

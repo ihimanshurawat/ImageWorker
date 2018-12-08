@@ -9,26 +9,21 @@ import android.graphics.drawable.Drawable
 import android.util.Base64
 import java.io.ByteArrayOutputStream
 import java.lang.IllegalArgumentException
-import java.util.*
-import android.opengl.ETC1.getHeight
-import android.opengl.ETC1.getWidth
+
 
 
 //Testing is Still Pending for this Class
 class Convert {
 
-    fun bitmapToDrawable(bitmap: Bitmap?): Drawable {
-        if(bitmap == null){
-            throw IllegalArgumentException("Bitmap cannot be Null")
-        }
+    fun bitmapToDrawable(bitmap: Bitmap): Drawable?{
 
         return BitmapDrawable(Resources.getSystem(),bitmap)
     }
 
-    fun bitmapToBase64(bitmap: Bitmap?): String?{
-        if(bitmap == null){
-            throw IllegalArgumentException("Bitmap cannot be Null")
-        }
+    fun bitmapToBase64(bitmap: Bitmap): String?{
+//        if(bitmap == null){
+//            throw IllegalArgumentException("Bitmap cannot be Null")
+//        }
         val outputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream)
         val byteArray: ByteArray = outputStream.toByteArray()
@@ -37,9 +32,9 @@ class Convert {
         return Base64.encodeToString(byteArray,Base64.DEFAULT)
     }
 
-    fun base64ToBitmap(base64: String?): Bitmap{
-        if(base64 == null || base64.isEmpty()){
-            throw IllegalArgumentException("Base64 Encoded String cannot be Null or Empty")
+    fun base64ToBitmap(base64: String): Bitmap?{
+        if(base64.isEmpty()){
+            throw IllegalArgumentException("Base64 Encoded String cannot be Empty")
         }
 
         val byteArray = Base64.decode(base64, Base64.DEFAULT)
@@ -47,19 +42,19 @@ class Convert {
     }
 
 
-    fun base64ToDrawable(base64: String?): Drawable{
-        if(base64 == null || base64.isEmpty()){
-            throw IllegalArgumentException("Base64 Encoded String cannot be Null or Empty")
+    fun base64ToDrawable(base64: String): Drawable?{
+        if(base64.isEmpty()){
+            throw IllegalArgumentException("Base64 Encoded String cannot be Empty")
         }
 
         return BitmapDrawable(Resources.getSystem(),base64ToBitmap(base64))
     }
 
-    fun drawableToBitmap(drawable: Drawable?): Bitmap{
+    fun drawableToBitmap(drawable: Drawable): Bitmap?{
 
-        if(drawable == null){
-            throw IllegalArgumentException("Drawable cannot be Null")
-        }
+//        if(drawable == null){
+//            throw IllegalArgumentException("Drawable cannot be Null")
+//        }
 
         if(drawable is BitmapDrawable){
             return drawable.bitmap
@@ -83,7 +78,7 @@ class Convert {
             throw IllegalArgumentException("Drawable cannot be Null or Empty")
         }
 
-        return bitmapToBase64(drawableToBitmap(drawable))
+        return bitmapToBase64(drawableToBitmap(drawable) as Bitmap)
     }
 
 

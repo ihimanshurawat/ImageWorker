@@ -13,6 +13,7 @@ import java.io.IOException
 import java.lang.NullPointerException
 import android.provider.MediaStore
 import android.content.ComponentName
+import com.himanshurawat.imageworker.work.Convert
 import com.himanshurawat.imageworker.work.From
 import com.himanshurawat.imageworker.work.To
 
@@ -27,6 +28,11 @@ class ImageWorker {
         fun from(context: Context): From{
             return From(context)
         }
+
+        fun convert(): Convert{
+            return Convert()
+        }
+
     }
 
 
