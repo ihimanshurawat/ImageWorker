@@ -30,7 +30,7 @@ In Application Level Gradle
 
 ```
 	dependencies {
-	        implementation 'com.github.1AboveAll:ImageWorker:SNAPSHOT'
+	        implementation 'com.github.1AboveAll:ImageWorker:-SNAPSHOT'
 	}
 
 ```
