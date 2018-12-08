@@ -12,6 +12,7 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
+import java.lang.IllegalArgumentException
 
 class From(private val context: Context) {
 
@@ -104,8 +105,6 @@ class From(private val context: Context) {
         return BitmapFactory.decodeFile(file.path)
 
     }
-
-
 
     private fun readPermissionGranted(): Boolean{
         if(ContextCompat.checkSelfPermission(context.applicationContext,
