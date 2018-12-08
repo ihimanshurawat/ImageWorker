@@ -32,8 +32,8 @@ class MainActivity : AppCompatActivity() {
 
 
         imageView.setImageBitmap(ImageWorker.from(this).directory("ImageWorker").
-            subDirectory("Gamer").
-            setFileName("Awesome").
+            subDirectory("SubDirectory").
+            setFileName("Image").
             withExtension(Extension.PNG).load())
 
 
@@ -47,19 +47,15 @@ class MainActivity : AppCompatActivity() {
             val imageBitmap = data?.extras?.get("data") as Bitmap
 
             ImageWorker.to(this).
-                directory("Image").
-                subDirectory("Drawable").
-                setFileName("1").
+                directory("ImageWorker").
+                subDirectory("SubDirectory").
+                setFileName("Image").
                 withExtension(Extension.PNG).
-                save(ContextCompat.getDrawable(this,R.drawable.ic_launcher_foreground))
+                save(imageBitmap)
 
 
         }
     }
-
-
-
-
 
 
     val REQUEST_IMAGE_CAPTURE = 1

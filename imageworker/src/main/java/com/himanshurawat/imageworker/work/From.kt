@@ -96,7 +96,7 @@ class From(private val context: Context) {
 
         //Create Directory If Doesn't Exist
         if(!dir.exists()){
-            dir.mkdirs()
+            return null
         }
 
         val file = File(dir,"$fileName$fileExtension")
