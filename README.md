@@ -14,6 +14,27 @@ Converting files doesn't require any special permission.
 ## Usage
 Guide to use ImageWorker Library
 
+### Add Dependencies
+
+In Project Level Gradle
+```
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
+
+In Application Level Gradle
+
+```
+	dependencies {
+	        implementation 'com.github.1AboveAll:ImageWorker:SNAPSHOT'
+	}
+
+```
+
 ### Save
 - **Required** Method **to(arg = Context)** is used to save Bitmap/Drawable/Base64
 - Method **directory(arg = String Path)** is used to create a directory. Multiple calling will result in the directory name of the last called function. **ImageWorker should work even without calling directory() method because the default directory would be the package name of your application.** 
