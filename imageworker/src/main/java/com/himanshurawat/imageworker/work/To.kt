@@ -14,7 +14,6 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
-import java.util.*
 import kotlin.NullPointerException
 
 class To(private val context: Context) {
@@ -28,8 +27,7 @@ class To(private val context: Context) {
     fun directory(dir: String?): To {
 
         if(dir!= null && dir.trim().isNotEmpty()){
-            val directoryString = dir.replace(" ", "")
-            directory = directoryString
+            directory = dir
         }else{
             throw IllegalArgumentException("Directory cannot be Empty or Null")
         }
@@ -41,11 +39,10 @@ class To(private val context: Context) {
     fun subDirectory(subDir: String?): To {
 
         if(subDir!=null && subDir.trim().isNotEmpty()){
-            val subDirectoryName = subDir.replace(" ","")
             if(subDirectory != null) {
-                subDirectory = "$subDirectory/$subDirectoryName"
+                subDirectory = "$subDirectory/$subDir"
             }else{
-                subDirectory = subDirectoryName
+                subDirectory = subDir
             }
         }else{
             throw java.lang.IllegalArgumentException("Sub Directory Name cannot be Empty or Null")
@@ -62,10 +59,6 @@ class To(private val context: Context) {
         return this
     }
 
-    fun setBitmapQuality(q: Int?){
-
-
-    }
 
     fun setFileName(s :String?): To {
 
@@ -90,7 +83,7 @@ class To(private val context: Context) {
         }
 
         if(fileExtension == null){
-            throw NullPointerException("File Extension Null. Use setFileExtension() Method")
+            throw NullPointerException("File Extension Null. Use withExtension() Method")
         }
 
         if(fileName == null){
@@ -159,7 +152,7 @@ class To(private val context: Context) {
 
 
         if(fileExtension == null){
-            throw NullPointerException("File Extension Null. Use setFileExtension() Method")
+            throw NullPointerException("File Extension Null. Use withExtension() Method")
         }
 
         if(fileName == null){
@@ -225,7 +218,7 @@ class To(private val context: Context) {
 
 
         if(fileExtension == null){
-            throw NullPointerException("File Extension Null. Use setFileExtension() Method")
+            throw NullPointerException("File Extension Null. Use withExtension() Method")
         }
 
         if(fileName == null){

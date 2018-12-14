@@ -31,8 +31,8 @@ class MainActivity : AppCompatActivity() {
         })
 
 
-        imageView.setImageBitmap(ImageWorker.from(this).directory("ImageWorker").
-            subDirectory("SubDirectory").
+        imageView.setImageBitmap(ImageWorker.from(this).directory("Image Worker").
+            subDirectory("Sub Directory").
             setFileName("Image").
             withExtension(Extension.PNG).load())
 
@@ -47,8 +47,8 @@ class MainActivity : AppCompatActivity() {
             val imageBitmap = data?.extras?.get("data") as Bitmap
 
             ImageWorker.to(this).
-                directory("ImageWorker").
-                subDirectory("SubDirectory").
+                directory("Image Worker").
+                subDirectory("Sub Directory").
                 setFileName("Image").
                 withExtension(Extension.PNG).
                 save(imageBitmap)

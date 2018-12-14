@@ -6,12 +6,8 @@ import android.graphics.BitmapFactory
 import android.os.Environment
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.PermissionChecker
-import android.util.Base64
 import com.himanshurawat.imageworker.Extension
 import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
 import java.lang.IllegalArgumentException
 
 class From(private val context: Context) {
@@ -25,8 +21,7 @@ class From(private val context: Context) {
     fun directory(dir: String?): From {
 
         if(dir!= null && dir.trim().isNotEmpty()){
-            val directoryString = dir.replace(" ", "")
-            directory = directoryString
+            directory = dir
         }else{
             throw IllegalArgumentException("Directory cannot be Empty or Null")
         }
@@ -38,11 +33,10 @@ class From(private val context: Context) {
     fun subDirectory(subDir: String?): From {
 
         if(subDir!=null && subDir.trim().isNotEmpty()){
-            val subDirectoryName = subDir.replace(" ","")
             if(subDirectory != null) {
-                subDirectory = "$subDirectory/$subDirectoryName"
+                subDirectory = "$subDirectory/$subDir"
             }else{
-                subDirectory = subDirectoryName
+                subDirectory = subDir
             }
         }else{
             throw java.lang.IllegalArgumentException("Sub Directory Name cannot be Empty or Null")
@@ -59,10 +53,6 @@ class From(private val context: Context) {
         return this
     }
 
-    fun setBitmapQuality(q: Int?){
-
-
-    }
 
     fun setFileName(s :String?): From {
 
@@ -79,7 +69,7 @@ class From(private val context: Context) {
     fun load(): Bitmap?{
 
         if(fileExtension == null){
-            throw NullPointerException("File Extension Null. Use setFileExtension() Method")
+            throw NullPointerException("File Extension Null. Use withExtension() Method")
         }
 
         if(fileName == null){
