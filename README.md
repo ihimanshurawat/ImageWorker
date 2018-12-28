@@ -54,7 +54,7 @@ ImageWorker.to(context).
 ```
 
 ### Retrieve
-- **Required** Method **from(arg = Context)** is used to reterieve saved files.
+- **Required** Method **from(arg = Context)** is used to retrieve saved files.
 - Method **directory(arg = String Path)** set directory where files is present. Multiple calling will result in the directory name of the last called function. **ImageWorker should work even without calling directory() method because the default directory would be the package name of your application.** 
 - Method **subDirectory(arg = String Path)** is used to get file in a sub-directory. This method can be nested.
 - **Required** Method **setFileName(arg = String File Name)** to set File Name.
