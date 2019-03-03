@@ -116,10 +116,10 @@ class To(private val context: Context) {
                 bitmap.compress(Bitmap.CompressFormat.PNG,quality,outStream)
             }
             if(fileExtension!!.equals(".jpeg",true)){
-                bitmap.compress(Bitmap.CompressFormat.PNG,quality,outStream)
+                bitmap.compress(Bitmap.CompressFormat.JPEG,quality,outStream)
             }
             if(fileExtension!!.equals(".webp",true)){
-                bitmap.compress(Bitmap.CompressFormat.PNG,quality,outStream)
+                bitmap.compress(Bitmap.CompressFormat.WEBP,quality,outStream)
             }
 
             outStream.flush()
@@ -185,10 +185,10 @@ class To(private val context: Context) {
                 bitmap.compress(Bitmap.CompressFormat.PNG,quality,outStream)
             }
             if(fileExtension!!.equals(".jpeg",true)){
-                bitmap.compress(Bitmap.CompressFormat.PNG,quality,outStream)
+                bitmap.compress(Bitmap.CompressFormat.JPEG,quality,outStream)
             }
             if(fileExtension!!.equals(".webp",true)){
-                bitmap.compress(Bitmap.CompressFormat.PNG,quality,outStream)
+                bitmap.compress(Bitmap.CompressFormat.WEBP,quality,outStream)
             }
 
             outStream.flush()
@@ -251,10 +251,10 @@ class To(private val context: Context) {
                 bitmap.compress(Bitmap.CompressFormat.PNG,quality,outStream)
             }
             if(fileExtension!!.equals(".jpeg",true)){
-                bitmap.compress(Bitmap.CompressFormat.PNG,quality,outStream)
+                bitmap.compress(Bitmap.CompressFormat.JPEG,quality,outStream)
             }
             if(fileExtension!!.equals(".webp",true)){
-                bitmap.compress(Bitmap.CompressFormat.PNG,quality,outStream)
+                bitmap.compress(Bitmap.CompressFormat.WEBP,quality,outStream)
             }
 
             outStream.flush()
