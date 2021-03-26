@@ -81,9 +81,9 @@ class From(private val context: Context) {
         }
 
         val dir = if(subDirectory == null)
-            File("${Environment.getExternalStorageDirectory().absolutePath}/$directory")
+            File("${context.getExternalFilesDir(null)?.absolutePath}/$directory")
         else
-            File("${Environment.getExternalStorageDirectory().absolutePath}/$directory/$subDirectory")
+            File("${context.getExternalFilesDir(null)?.absolutePath}/$directory/$subDirectory")
 
         //Create Directory If Doesn't Exist
         if(!dir.exists()){
