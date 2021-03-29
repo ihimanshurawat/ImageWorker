@@ -52,7 +52,7 @@ In Application Level Gradle
 
 ```
 	dependencies {
-	        implementation 'com.github.ihimanshurawat:ImageWorker:1.0'
+	        implementation 'com.github.ihimanshurawat:ImageWorker:1.1.1'
 	}
 
 ```
