@@ -1,5 +1,27 @@
 # ImageWorker
-ImageWorker is the Library to handle all your Image needs Save, Retrieve, and Convert. To and From external storage. 
+
+ImageWorker is the Library to handle all your Image needs Save, Retrieve, and Convert. To and From external storage dedicated for your application. For information you can refer the documentation:
+https://developer.android.com/about/versions/11/privacy/storage
+
+** UPDATE 29/03/2021 **
+
+Now the new Path where the files are store would be:
+
+Internal shared storage\Android\data\<your-app-package>\<your-specified-directory>
+
+Note - It could be possible that the Directories are not visible File Managers for Android 11. So don't panic your content will be in Android\data\<your-app-package>\<your-specified-directory>\<your-filename>
+
+Raise issues if you have more queries.
+
+Additional Notes
+
+If you want to contine using the previous implementation then please modify the Manifest file. 
+
+Google Say's "If your app opts out of scoped storage when running on Android 10 devices, it's recommended that you continue to set requestLegacyExternalStorage to true in your app's manifest file. That way, your app can continue to behave as expected on devices that run Android 10."
+
+Also, "Apps that run on Android 11 but target Android 10 (API level 29) can still request the requestLegacyExternalStorage attribute. This flag allows apps to temporarily opt out of the changes associated with scoped storage, such as granting access to different directories and different types of media files. After you update your app to target Android 11, the system ignores the requestLegacyExternalStorage flag."
+
+You can't bypass this unless your application is a File Explorer, an Anti-virus etc. 
 
 ## Features
 - Save Bitmap, Drawable and Base64 encoded String directly to the External Storage. In following *.png, *.jpeg, and *.webp formats. 
