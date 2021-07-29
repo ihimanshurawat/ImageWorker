@@ -1,6 +1,8 @@
 package com.himanshurawat.imageworkersample
 
+import android.annotation.SuppressLint
 import android.app.usage.UsageStats
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -17,18 +19,28 @@ import android.graphics.drawable.Drawable
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import kotlinx.android.synthetic.main.activity_main.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.Toast
 
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var button: Button
+    private lateinit var imageView: ImageView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        button = findViewById(R.id.button)
+        imageView = findViewById(R.id.imageView)
         val bitmapDrawable = ContextCompat.getDrawable(this,R.drawable.rose) as BitmapDrawable
 
         button.setOnClickListener {
-            dispatchTakePictureIntent()
+
+            //dispatchTakePictureIntent()
+            //val bool = ImageWorker.from(this).directory("Image Worker").subDirectory("Sub").setFileName("Image").withExtension(Extension.PNG).delete()
+            //Toast.makeText(this, "Hello $bool",Toast.LENGTH_SHORT).show()
         }
 
         val bitmap = ImageWorker.from(this).directory("Image Worker").
@@ -59,12 +71,14 @@ class MainActivity : AppCompatActivity() {
     private val REQUEST_IMAGE_CAPTURE = 1
 
     private fun dispatchTakePictureIntent() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            takePictureIntent.resolveActivity(packageManager)?.also {
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-            }
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        try {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+        } catch (e: ActivityNotFoundException) {
+            // display error state to the user
         }
     }
+
 
 
 }
