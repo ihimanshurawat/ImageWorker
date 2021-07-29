@@ -1,5 +1,8 @@
 # ImageWorker
 
+[![](https://jitpack.io/v/ihimanshurawat/ImageWorker.svg)](https://jitpack.io/#ihimanshurawat/ImageWorker)
+
+
 ImageWorker is the Library to handle all your Image needs Save, Retrieve, and Convert. To and From external storage dedicated for your application. For information you can refer the documentation:
 https://developer.android.com/about/versions/11/privacy/storage
 
@@ -52,7 +55,7 @@ In Application Level Gradle
 
 ```
 	dependencies {
-	        implementation 'com.github.ihimanshurawat:ImageWorker:1.1.1'
+	        implementation 'com.github.ihimanshurawat:ImageWorker:1.2.0'
 	}
 
 ```
@@ -91,8 +94,26 @@ val bitmap: Bitmap? = ImageWorker.from(context).
     withExtension(Extension.PNG).
     load()
 ```
-### Convert
+### Delete - Added in v1.2.0
+- **Required** Method **from(arg = Context)** is used to delete the saved images.
+- Method **directory(arg = String Path)** set directory where files is present. Multiple calling will result in the directory name of the last called function. **ImageWorker should work even without calling directory() method because the default directory would be the package name of your application.** 
+- Method **subDirectory(arg = String Path)** is used to get file in a sub-directory. This method can create nested directories.  
+- **Required** Method **setFileName(arg = String File Name)** to set File Name which you want to delete.
+- **Required** Method **withExtension(arg = Extension)** the arguments of this method must be either one of these Extension.PNG, Extension.WEBP, and Extension.JPEG.
+- **Required** Method **delete()** will delete Image File.
+- The function returns a boolean if the file is successfully deleted and vice versa. 
+- To prevent missue, you can only delete files with the extensions .PNG, .JPEG, and .WEBP. 
 
+```
+val bitmap: Bitmap? = ImageWorker.from(context).
+    directory("ImageWorker").
+    subDirectory("SubDirectory").
+    setFileName("Image").
+    withExtension(Extension.PNG).
+    delete()
+```
+
+### Convert
 Methods to convert Bitmap to Drawable/Base64 String.
 
 ```val drawable: Drawable? = ImageWorker.convert().bitmapToDrawable(inputBitmap)```
