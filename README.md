@@ -1,7 +1,7 @@
 # ImageWorker
 
 [![](https://jitpack.io/v/ihimanshurawat/ImageWorker.svg)](https://jitpack.io/#ihimanshurawat/ImageWorker)
-
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/ihimanshurawat)
 
 ImageWorker is the Library to handle all your Image needs Save, Retrieve, and Convert. To and From external storage dedicated for your application. For information you can refer the documentation:
 https://developer.android.com/about/versions/11/privacy/storage
