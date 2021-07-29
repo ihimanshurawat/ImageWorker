@@ -1,6 +1,7 @@
 # ImageWorker
 
 [![](https://jitpack.io/v/ihimanshurawat/ImageWorker.svg)](https://jitpack.io/#ihimanshurawat/ImageWorker)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-ButtonProgressBar-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/7370)
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/ihimanshurawat)
 
 ImageWorker is the Library to handle all your Image needs Save, Retrieve, and Convert. To and From external storage dedicated for your application. For information you can refer the documentation:
