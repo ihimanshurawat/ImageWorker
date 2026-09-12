@@ -31,102 +31,95 @@ You can't bypass this unless your application is a File Explorer, an Anti-virus 
 - Save Bitmap, Drawable and Base64 encoded String directly to the External Storage. In following *.png, *.jpeg, and *.webp formats. 
 - Retrieve saved files and use them as Bitmap.
 - Convert Bitmap to Drawable or Base64 and vice versa.
-## Pre-Requisite 
-- Saving files would require WRITE_EXTERNAL_STORAGE permission.
-- Retrieving files would require READ_EXTERNAL_STORAGE permission.
-
-Converting files doesn't require any special permission.
+## Pre-Requisites & Storage Permissions
+- ImageWorker stores images in application-specific external storage (`context.getExternalFilesDir(null)`).
+- On Android 4.4+ (API 19+) including modern Android (11, 12, 13, 14, 15+), **no runtime storage permissions are required**.
+- On legacy Android versions below API 19, `WRITE_EXTERNAL_STORAGE` and `READ_EXTERNAL_STORAGE` permissions are required.
+- Converting files does not require any permissions.
 
 ## Usage
 Guide to use ImageWorker Library
 
 ### Add Dependencies
 
-In Project Level Gradle
-```
-	allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
-	}
+In Project Level Gradle (`settings.gradle` or `build.gradle`):
+```groovy
+dependencyResolutionManagement {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
 ```
 
-In Application Level Gradle
+In Application Level Gradle (`build.gradle`):
 
-```
-	dependencies {
-	        implementation 'com.github.ihimanshurawat:ImageWorker:1.2.0'
-	}
-
+```groovy
+dependencies {
+    implementation 'com.github.ihimanshurawat:ImageWorker:1.3.0'
+}
 ```
 
 ### Save
 - **Required** Method **to(arg = Context)** is used to save Bitmap/Drawable/Base64
-- Method **directory(arg = String Path)** is used to create a directory. Multiple calling will result in the directory name of the last called function. **ImageWorker should work even without calling directory() method because the default directory would be the package name of your application.** 
+- Method **directory(arg = String Path)** is used to create a directory. Multiple calling will result in the directory name of the last called function. **ImageWorker works even without calling directory() because the default directory is the package name of your application.** 
 - Method **subDirectory(arg = String Path)** is used to create a directory inside a directory. It can be nested to create directories inside directories.
 - **Required** Method **setFileName(arg = String File Name)** to set File Name.
-- **Required** Method **withExtension(arg = Extension)** the arguments of this method must be either one of these Extension.PNG, Extension.WEBP, and Extension.JPEG.
-- **Required** Method **save(arg = bitmap and quality/drawable and quality/base64 and quality)** default quality (Int) will be 100. 
-quality must be 0 < quality <= 100
+- **Required** Method **withExtension(arg = Extension)** the arguments of this method must be either `Extension.PNG`, `Extension.WEBP`, `Extension.JPEG`, or `Extension.JPG`.
+- **Required** Method **save(arg = bitmap and quality/drawable and quality/base64 and quality)** default quality (Int) is 100 (1 <= quality <= 100).
 
-```
-ImageWorker.to(context).
-    directory("ImageWorker").
-    subDirectory("SubDirectory").
-    setFileName("Image").
-    withExtension(Extension.PNG).
-    save(sourceBitmap,85)
+```kotlin
+ImageWorker.to(context)
+    .directory("ImageWorker")
+    .subDirectory("SubDirectory")
+    .setFileName("Image")
+    .withExtension(Extension.PNG)
+    .save(sourceBitmap, 85)
 ```
 
 ### Retrieve
 - **Required** Method **from(arg = Context)** is used to retrieve saved files.
-- Method **directory(arg = String Path)** set directory where files is present. Multiple calling will result in the directory name of the last called function. **ImageWorker should work even without calling directory() method because the default directory would be the package name of your application.** 
+- Method **directory(arg = String Path)** set directory where files are present. **Default directory is the package name of your application.** 
 - Method **subDirectory(arg = String Path)** is used to get file in a sub-directory. This method can be nested.
 - **Required** Method **setFileName(arg = String File Name)** to set File Name.
-- **Required** Method **withExtension(arg = Extension)** the arguments of this method must be either one of these Extension.PNG, Extension.WEBP, and Extension.JPEG.
-- **Required** Method **load()** will return Bitmap.
+- **Required** Method **withExtension(arg = Extension)** to specify file extension.
+- **Required** Method **load()** will return `Bitmap?`.
 
+```kotlin
+val bitmap: Bitmap? = ImageWorker.from(context)
+    .directory("ImageWorker")
+    .subDirectory("SubDirectory")
+    .setFileName("Image")
+    .withExtension(Extension.PNG)
+    .load()
 ```
-val bitmap: Bitmap? = ImageWorker.from(context).
-    directory("ImageWorker").
-    subDirectory("SubDirectory").
-    setFileName("Image").
-    withExtension(Extension.PNG).
-    load()
-```
-### Delete - Added in v1.2.0
-- **Required** Method **from(arg = Context)** is used to delete the saved images.
-- Method **directory(arg = String Path)** set directory where files is present. Multiple calling will result in the directory name of the last called function. **ImageWorker should work even without calling directory() method because the default directory would be the package name of your application.** 
-- Method **subDirectory(arg = String Path)** is used to get file in a sub-directory. This method can create nested directories.  
-- **Required** Method **setFileName(arg = String File Name)** to set File Name which you want to delete.
-- **Required** Method **withExtension(arg = Extension)** the arguments of this method must be either one of these Extension.PNG, Extension.WEBP, and Extension.JPEG.
-- **Required** Method **delete()** will delete Image File.
-- The function returns a boolean if the file is successfully deleted and vice versa. 
-- To prevent missue, you can only delete files with the extensions .PNG, .JPEG, and .WEBP. 
 
-```
-val bitmap: Bitmap? = ImageWorker.from(context).
-    directory("ImageWorker").
-    subDirectory("SubDirectory").
-    setFileName("Image").
-    withExtension(Extension.PNG).
-    delete()
+### Delete
+- **Required** Method **from(arg = Context)** is used to delete saved images.
+- Method **directory(arg = String Path)** set directory where file is present.
+- Method **subDirectory(arg = String Path)** set sub-directory where file is present.
+- **Required** Method **setFileName(arg = String File Name)** to set File Name to delete.
+- **Required** Method **withExtension(arg = Extension)** to specify file extension.
+- **Required** Method **delete()** returns `true` if the file was deleted successfully, otherwise `false`.
+
+```kotlin
+val isDeleted: Boolean = ImageWorker.from(context)
+    .directory("ImageWorker")
+    .subDirectory("SubDirectory")
+    .setFileName("Image")
+    .withExtension(Extension.PNG)
+    .delete()
 ```
 
 ### Convert
-Methods to convert Bitmap to Drawable/Base64 String.
+Methods to convert between Bitmap, Drawable, and Base64 String:
 
-```val drawable: Drawable? = ImageWorker.convert().bitmapToDrawable(inputBitmap)```
-
-
-```val base64: String? = ImageWorker.convert().bitmapToBase64(inputBitmap)```
-
-Similar methods for Drawable and Base64.
-
-## Issues
-
-Requires through testing for edge cases and large file sizes. 
-
-If you happen to found some don't hesitate to report em.
+```kotlin
+val drawable: Drawable? = ImageWorker.convert().bitmapToDrawable(inputBitmap)
+val base64: String? = ImageWorker.convert().bitmapToBase64(inputBitmap)
+val bitmap: Bitmap? = ImageWorker.convert().base64ToBitmap(base64String)
+val drawable: Drawable? = ImageWorker.convert().base64ToDrawable(base64String)
+val bitmap: Bitmap? = ImageWorker.convert().drawableToBitmap(inputDrawable)
+val base64: String? = ImageWorker.convert().drawableToBase64(inputDrawable)
+```
 
