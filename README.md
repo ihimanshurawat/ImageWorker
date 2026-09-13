@@ -1,58 +1,83 @@
 # ImageWorker
 
-[![](https://jitpack.io/v/ihimanshurawat/ImageWorker.svg)](https://jitpack.io/#ihimanshurawat/ImageWorker)
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-ImageWorker-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/7370)
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/ihimanshurawat)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/ihimanshurawat/ImageWorker/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" height="80" alt="ImageWorker Logo"/>
+</p>
 
-ImageWorker is the Library to handle all your Image needs Save, Retrieve, and Convert. To and From external storage dedicated for your application. For information you can refer the documentation:
-https://developer.android.com/about/versions/11/privacy/storage
+<p align="center">
+  <strong>A modern, lightweight, zero-permission image handling library for Android.</strong><br>
+  Save, retrieve, delete, and convert images seamlessly in application-specific scoped storage.
+</p>
 
-** UPDATE 29/03/2021 **
+<p align="center">
+  <a href="https://jitpack.io/#ihimanshurawat/ImageWorker"><img src="https://jitpack.io/v/ihimanshurawat/ImageWorker.svg?style=flat-square" alt="JitPack Release"/></a>
+  <img src="https://img.shields.io/badge/Platform-Android-3DDC84.svg?style=flat-square&logo=android" alt="Platform"/>
+  <img src="https://img.shields.io/badge/Min%20SDK-21-blue.svg?style=flat-square" alt="Min SDK 21"/>
+  <img src="https://img.shields.io/badge/Target%20SDK-34%2B-orange.svg?style=flat-square" alt="Target SDK 34+"/>
+  <img src="https://img.shields.io/badge/Kotlin-1.9%2B-7F52FF.svg?style=flat-square&logo=kotlin" alt="Kotlin 1.9+"/>
+  <img src="https://img.shields.io/badge/Compose-Compatible-4285F4.svg?style=flat-square&logo=jetpackcompose" alt="Jetpack Compose Ready"/>
+  <a href="https://www.buymeacoffee.com/ihimanshurawat"><img src="https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Donate-yellow.svg?style=flat-square&logo=buymeacoffee" alt="Buy Me A Coffee"/></a>
+</p>
 
-Now the new Path where the files are store would be:
+---
 
-Internal shared storage\Android\data\<your-app-package>\<your-specified-directory>
+## 🚀 Key Highlights
 
-Note - It could be possible that the Directories are not visible File Managers for Android 11. So don't panic your content will be in Android\data\<your-app-package>\<your-specified-directory>\<your-filename>
+- 🛡️ **Zero Runtime Permissions**: Fully compliant with modern Android Scoped Storage (Android 11, 12, 13, 14, 15+). Files are saved to app-specific external storage (`context.getExternalFilesDir(null)`), eliminating Google Play permission declarations.
+- ⚡ **Lightweight & Efficient**: Pure native Android APIs with automatic stream lifecycle management (`.use { ... }`) to avoid memory leaks.
+- 🎨 **Multi-Format Compression**: Seamlessly compress and store in `PNG`, `JPEG`, `JPG`, and `WEBP` (including `WEBP_LOSSY` on Android 11+).
+- 🔄 **Bidirectional Converter**: Effortlessly convert between `Bitmap`, `Drawable`, and `Base64` strings.
+- 🧩 **Compose & Coroutine Ready**: Clean fluent API that slots naturally into `Dispatchers.IO` and Jetpack Compose state pipelines.
 
-Raise issues if you have more queries.
+---
 
-Additional Notes
+## 📦 Installation
 
-If you want to contine using the previous implementation then please modify the Manifest file. 
+ImageWorker is published via **JitPack**.
 
-Google Say's "If your app opts out of scoped storage when running on Android 10 devices, it's recommended that you continue to set requestLegacyExternalStorage to true in your app's manifest file. That way, your app can continue to behave as expected on devices that run Android 10."
+### 1. Add Maven Repository
 
-Also, "Apps that run on Android 11 but target Android 10 (API level 29) can still request the requestLegacyExternalStorage attribute. This flag allows apps to temporarily opt out of the changes associated with scoped storage, such as granting access to different directories and different types of media files. After you update your app to target Android 11, the system ignores the requestLegacyExternalStorage flag."
+In your root `settings.gradle.kts` (or `settings.gradle`):
 
-You can't bypass this unless your application is a File Explorer, an Anti-virus etc. 
-
-## Features
-- Save Bitmap, Drawable and Base64 encoded String directly to the External Storage. In following *.png, *.jpeg, and *.webp formats. 
-- Retrieve saved files and use them as Bitmap.
-- Convert Bitmap to Drawable or Base64 and vice versa.
-## Pre-Requisites & Storage Permissions
-- ImageWorker stores images in application-specific external storage (`context.getExternalFilesDir(null)`).
-- On Android 4.4+ (API 19+) including modern Android (11, 12, 13, 14, 15+), **no runtime storage permissions are required**.
-- On legacy Android versions below API 19, `WRITE_EXTERNAL_STORAGE` and `READ_EXTERNAL_STORAGE` permissions are required.
-- Converting files does not require any permissions.
-
-## Usage
-Guide to use ImageWorker Library
-
-### Add Dependencies
-
-In Project Level Gradle (`settings.gradle` or `build.gradle`):
-```groovy
+```kotlin
 dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        ...
-        maven { url 'https://jitpack.io' }
+        google()
+        mavenCentral()
+        maven("https://jitpack.io")
     }
 }
 ```
 
-In Application Level Gradle (`build.gradle`):
+### 2. Add Dependency
+
+#### Option A: Version Catalog (`gradle/libs.versions.toml`) *(Recommended)*
+
+```toml
+[versions]
+imageWorker = "1.3.0"
+
+[libraries]
+imageworker = { module = "com.github.ihimanshurawat:ImageWorker", version.ref = "imageWorker" }
+```
+
+In your module's `build.gradle.kts`:
+```kotlin
+dependencies {
+    implementation(libs.imageworker)
+}
+```
+
+#### Option B: Kotlin DSL (`build.gradle.kts`)
+
+```kotlin
+dependencies {
+    implementation("com.github.ihimanshurawat:ImageWorker:1.3.0")
+}
+```
+
+#### Option C: Groovy DSL (`build.gradle`)
 
 ```groovy
 dependencies {
@@ -60,66 +85,197 @@ dependencies {
 }
 ```
 
-### Save
-- **Required** Method **to(arg = Context)** is used to save Bitmap/Drawable/Base64
-- Method **directory(arg = String Path)** is used to create a directory. Multiple calling will result in the directory name of the last called function. **ImageWorker works even without calling directory() because the default directory is the package name of your application.** 
-- Method **subDirectory(arg = String Path)** is used to create a directory inside a directory. It can be nested to create directories inside directories.
-- **Required** Method **setFileName(arg = String File Name)** to set File Name.
-- **Required** Method **withExtension(arg = Extension)** the arguments of this method must be either `Extension.PNG`, `Extension.WEBP`, `Extension.JPEG`, or `Extension.JPG`.
-- **Required** Method **save(arg = bitmap and quality/drawable and quality/base64 and quality)** default quality (Int) is 100 (1 <= quality <= 100).
+---
+
+## 🛠️ Usage Guide
+
+### 1. Saving an Image (`ImageWorker.to`)
+
+Save `Bitmap`, `Drawable`, or `Base64` encoded strings directly to external app-dedicated storage:
 
 ```kotlin
+// Save a Bitmap with 85% quality in PNG format
 ImageWorker.to(context)
-    .directory("ImageWorker")
-    .subDirectory("SubDirectory")
-    .setFileName("Image")
-    .withExtension(Extension.PNG)
-    .save(sourceBitmap, 85)
+    .directory("ProfilePhotos")          // Optional: Defaults to package name
+    .subDirectory("Avatars")             // Optional: Supports nesting
+    .setFileName("user_avatar_101")      // Required
+    .withExtension(Extension.PNG)        // Required: PNG, JPEG, JPG, WEBP
+    .save(bitmap = profileBitmap, quality = 85)
+
+// Save a Drawable
+ImageWorker.to(context)
+    .setFileName("badge_icon")
+    .withExtension(Extension.WEBP)
+    .save(drawable = context.getDrawable(R.drawable.ic_badge))
+
+// Save a Base64 string
+ImageWorker.to(context)
+    .setFileName("receipt")
+    .withExtension(Extension.JPEG)
+    .save(base64 = base64ImageString, quality = 90)
 ```
 
-### Retrieve
-- **Required** Method **from(arg = Context)** is used to retrieve saved files.
-- Method **directory(arg = String Path)** set directory where files are present. **Default directory is the package name of your application.** 
-- Method **subDirectory(arg = String Path)** is used to get file in a sub-directory. This method can be nested.
-- **Required** Method **setFileName(arg = String File Name)** to set File Name.
-- **Required** Method **withExtension(arg = Extension)** to specify file extension.
-- **Required** Method **load()** will return `Bitmap?`.
+> **Quality parameter**: Integer between `1` and `100` (defaults to `100`).
+
+---
+
+### 2. Loading an Image (`ImageWorker.from`)
+
+Retrieve a previously saved image as an Android `Bitmap?`:
 
 ```kotlin
 val bitmap: Bitmap? = ImageWorker.from(context)
-    .directory("ImageWorker")
-    .subDirectory("SubDirectory")
-    .setFileName("Image")
+    .directory("ProfilePhotos")
+    .subDirectory("Avatars")
+    .setFileName("user_avatar_101")
     .withExtension(Extension.PNG)
     .load()
 ```
 
-### Delete
-- **Required** Method **from(arg = Context)** is used to delete saved images.
-- Method **directory(arg = String Path)** set directory where file is present.
-- Method **subDirectory(arg = String Path)** set sub-directory where file is present.
-- **Required** Method **setFileName(arg = String File Name)** to set File Name to delete.
-- **Required** Method **withExtension(arg = Extension)** to specify file extension.
-- **Required** Method **delete()** returns `true` if the file was deleted successfully, otherwise `false`.
+---
+
+### 3. Deleting an Image (`delete`)
+
+Remove stored files when no longer needed:
 
 ```kotlin
 val isDeleted: Boolean = ImageWorker.from(context)
-    .directory("ImageWorker")
-    .subDirectory("SubDirectory")
-    .setFileName("Image")
+    .directory("ProfilePhotos")
+    .subDirectory("Avatars")
+    .setFileName("user_avatar_101")
     .withExtension(Extension.PNG)
     .delete()
 ```
 
-### Convert
-Methods to convert between Bitmap, Drawable, and Base64 String:
+---
+
+### 4. Format Conversion (`ImageWorker.convert`)
+
+Convert between `Bitmap`, `Drawable`, and `Base64` representations without writing to disk:
 
 ```kotlin
-val drawable: Drawable? = ImageWorker.convert().bitmapToDrawable(inputBitmap)
-val base64: String? = ImageWorker.convert().bitmapToBase64(inputBitmap)
-val bitmap: Bitmap? = ImageWorker.convert().base64ToBitmap(base64String)
-val drawable: Drawable? = ImageWorker.convert().base64ToDrawable(base64String)
-val bitmap: Bitmap? = ImageWorker.convert().drawableToBitmap(inputDrawable)
-val base64: String? = ImageWorker.convert().drawableToBase64(inputDrawable)
+val converter = ImageWorker.convert()
+
+// Bitmap conversions
+val drawable: Drawable? = converter.bitmapToDrawable(bitmap)
+val base64String: String? = converter.bitmapToBase64(bitmap)
+
+// Base64 conversions
+val bitmap: Bitmap? = converter.base64ToBitmap(base64String)
+val drawable: Drawable? = converter.base64ToDrawable(base64String)
+
+// Drawable conversions
+val bitmap: Bitmap? = converter.drawableToBitmap(drawable)
+val base64String: String? = converter.drawableToBase64(drawable)
 ```
 
+---
+
+## 📱 Modern Android Patterns
+
+### Asynchronous Execution with Kotlin Coroutines
+
+Disk operations should always be performed off the main thread. Combine ImageWorker with `withContext(Dispatchers.IO)`:
+
+```kotlin
+suspend fun saveUserProfile(context: Context, bitmap: Bitmap): Boolean = withContext(Dispatchers.IO) {
+    try {
+        ImageWorker.to(context)
+            .directory("UserProfiles")
+            .setFileName("current_user")
+            .withExtension(Extension.WEBP)
+            .save(bitmap, quality = 90)
+        true
+    } catch (e: Exception) {
+        false
+    }
+}
+
+suspend fun loadUserProfile(context: Context): Bitmap? = withContext(Dispatchers.IO) {
+    ImageWorker.from(context)
+        .directory("UserProfiles")
+        .setFileName("current_user")
+        .withExtension(Extension.WEBP)
+        .load()
+}
+```
+
+### Integration with Jetpack Compose
+
+Load and display your images easily in a `@Composable`:
+
+```kotlin
+@Composable
+fun ProfileImageCard(context: Context) {
+    var userBitmap by remember { mutableStateOf<Bitmap?>(null) }
+
+    LaunchedEffect(Unit) {
+        userBitmap = withContext(Dispatchers.IO) {
+            ImageWorker.from(context)
+                .directory("UserProfiles")
+                .setFileName("current_user")
+                .withExtension(Extension.WEBP)
+                .load()
+        }
+    }
+
+    userBitmap?.let { bitmap ->
+        Image(
+            bitmap = bitmap.asImageBitmap(),
+            contentDescription = "User Avatar",
+            modifier = Modifier
+                .size(100.dp)
+                .clip(CircleShape),
+            contentScale = ContentScale.Crop
+        )
+    } ?: Box(
+        modifier = Modifier.size(100.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
+    }
+}
+```
+
+---
+
+## 🔒 Storage & Permissions Breakdown
+
+Starting in modern Android versions, broad storage permissions (`WRITE_EXTERNAL_STORAGE`, `READ_EXTERNAL_STORAGE`) are deprecated and blocked on Google Play for general apps.
+
+ImageWorker leverages **application-specific storage**:
+```
+/storage/emulated/0/Android/data/<your-application-id>/files/<directory>/<subDirectory>/<filename>.<ext>
+```
+
+| Android Version | API Level | Permissions Required? | Details |
+| :--- | :--- | :---: | :--- |
+| **Android 11 – Android 15+** | API 30+ | **None** | Full scoped storage compliance; zero user permission prompts needed. |
+| **Android 4.4 – Android 10** | API 19 – 29 | **None** | App-specific external storage does not require runtime permissions. |
+| **Android 4.3 & below** | API <= 18 | `WRITE_EXTERNAL_STORAGE` | Legacy fallback (handled automatically). |
+
+> [!NOTE]
+> Files stored in application-specific directories are automatically cleared by the Android OS when your app is uninstalled.
+
+---
+
+## ⚙️ Supported Extensions
+
+| Extension Enum | File Suffix | Format Details |
+| :--- | :--- | :--- |
+| `Extension.PNG` | `.png` | Lossless compression, preserves alpha channel |
+| `Extension.JPEG` | `.jpeg` | Standard lossy compression, adjustable quality |
+| `Extension.JPG` | `.jpg` | Alias for JPEG format |
+| `Extension.WEBP` | `.webp` | Modern web format (`WEBP_LOSSY` on Android 11+) |
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/ihimanshurawat/ImageWorker/issues).
+
+---
+
+## 📄 License
+
+This project is licensed under the open-source community standards. See individual source files for details.
