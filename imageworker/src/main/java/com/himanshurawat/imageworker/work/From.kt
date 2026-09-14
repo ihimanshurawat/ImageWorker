@@ -1,9 +1,14 @@
 package com.himanshurawat.imageworker.work
 
+import android.content.ContentUris
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import com.himanshurawat.imageworker.Extension
@@ -128,6 +133,209 @@ class From(private val context: Context) {
         }
         //Return the boolean if System is able to delete the File or not.
         return file.delete()
+    }
+
+    fun getFile(): File {
+        if (fileExtension == null) {
+            throw NullPointerException("File Extension Null. Use withExtension() Method")
+        }
+        if (fileName == null) {
+            throw NullPointerException("File Name Null. Use setFileName() Method")
+        }
+        val dir = if (subDirectory == null)
+            File("${context.getExternalFilesDir(null)?.absolutePath}/$directory")
+        else
+            File("${context.getExternalFilesDir(null)?.absolutePath}/$directory/$subDirectory")
+        return File(dir, "$fileName$fileExtension")
+    }
+
+    fun existsInGallery(): Boolean {
+        if (fileExtension == null) {
+            throw NullPointerException("File Extension Null. Use withExtension() Method")
+        }
+        if (fileName == null) {
+            throw NullPointerException("File Name Null. Use setFileName() Method")
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            try {
+                val projection = arrayOf(MediaStore.Images.Media._ID)
+                val selection = "${MediaStore.Images.Media.DISPLAY_NAME} = ?"
+                val selectionArgs = arrayOf("$fileName$fileExtension")
+                val cursor = context.contentResolver.query(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    projection,
+                    selection,
+                    selectionArgs,
+                    null
+                )
+                val exists = cursor?.use { it.count > 0 } ?: false
+                if (exists) return true
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        } else {
+            val picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+            val targetDir = if (subDirectory == null) {
+                File(picturesDir, "$directory")
+            } else {
+                File(picturesDir, "$directory/$subDirectory")
+            }
+            val publicFile = File(targetDir, "$fileName$fileExtension")
+            if (publicFile.exists()) return true
+        }
+
+        return try {
+            getFile().exists()
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun deleteFromGallery(): Boolean {
+        if (fileExtension == null) {
+            throw NullPointerException("File Extension Null. Use withExtension() Method")
+        }
+        if (fileName == null) {
+            throw NullPointerException("File Name Null. Use setFileName() Method")
+        }
+
+        var deleted = false
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            try {
+                val projection = arrayOf(MediaStore.Images.Media._ID)
+                val selection = "${MediaStore.Images.Media.DISPLAY_NAME} = ?"
+                val selectionArgs = arrayOf("$fileName$fileExtension")
+                val cursor = context.contentResolver.query(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    projection,
+                    selection,
+                    selectionArgs,
+                    null
+                )
+                cursor?.use {
+                    val idCol = it.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+                    while (it.moveToNext()) {
+                        val mediaId = it.getLong(idCol)
+                        val uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, mediaId)
+                        context.contentResolver.delete(uri, null, null)
+                        deleted = true
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        } else {
+            try {
+                val picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                val targetDir = if (subDirectory == null) {
+                    File(picturesDir, "$directory")
+                } else {
+                    File(picturesDir, "$directory/$subDirectory")
+                }
+                val publicFile = File(targetDir, "$fileName$fileExtension")
+                if (publicFile.exists()) {
+                    deleted = publicFile.delete()
+                    MediaScannerConnection.scanFile(
+                        context,
+                        arrayOf(publicFile.absolutePath),
+                        arrayOf(getMimeType()),
+                        null
+                    )
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        // Also delete local copy if exists
+        try {
+            val localFile = getFile()
+            if (localFile.exists()) {
+                deleted = localFile.delete() || deleted
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return deleted
+    }
+
+    fun getGalleryUri(): Uri? {
+        if (fileExtension == null) {
+            throw NullPointerException("File Extension Null. Use withExtension() Method")
+        }
+        if (fileName == null) {
+            throw NullPointerException("File Name Null. Use setFileName() Method")
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            try {
+                val projection = arrayOf(MediaStore.Images.Media._ID)
+                val selection = "${MediaStore.Images.Media.DISPLAY_NAME} = ?"
+                val selectionArgs = arrayOf("$fileName$fileExtension")
+                val cursor = context.contentResolver.query(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    projection,
+                    selection,
+                    selectionArgs,
+                    null
+                )
+                cursor?.use {
+                    if (it.moveToFirst()) {
+                        val mediaId = it.getLong(it.getColumnIndexOrThrow(MediaStore.Images.Media._ID))
+                        return ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, mediaId)
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        } else {
+            val picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+            val targetDir = if (subDirectory == null) {
+                File(picturesDir, "$directory")
+            } else {
+                File(picturesDir, "$directory/$subDirectory")
+            }
+            val publicFile = File(targetDir, "$fileName$fileExtension")
+            if (publicFile.exists()) {
+                return Uri.fromFile(publicFile)
+            }
+        }
+
+        // Fallback to local file Uri if available
+        return try {
+            val localFile = getFile()
+            if (localFile.exists()) {
+                Uri.fromFile(localFile)
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    fun loadFromGallery(): Bitmap? {
+        val uri = getGalleryUri() ?: return null
+        return try {
+            context.contentResolver.openInputStream(uri)?.use { stream ->
+                BitmapFactory.decodeStream(stream)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun getMimeType(): String {
+        return when {
+            fileExtension.equals(".png", true) -> "image/png"
+            fileExtension.equals(".jpeg", true) || fileExtension.equals(".jpg", true) -> "image/jpeg"
+            fileExtension.equals(".webp", true) -> "image/webp"
+            else -> "image/png"
+        }
     }
 
     private fun readPermissionGranted(): Boolean {

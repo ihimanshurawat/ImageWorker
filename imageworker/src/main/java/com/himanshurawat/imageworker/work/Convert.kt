@@ -40,14 +40,14 @@ class Convert {
     }
 
     fun drawableToBitmap(drawable: Drawable): Bitmap? {
-        if (drawable is BitmapDrawable) {
+        if (drawable is BitmapDrawable && drawable.bitmap != null) {
             return drawable.bitmap
         }
 
         var width = drawable.intrinsicWidth
-        width = if (width > 0) width else 1
+        width = if (width > 0) width else 1080
         var height = drawable.intrinsicHeight
-        height = if (height > 0) height else 1
+        height = if (height > 0) height else 1920
 
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)

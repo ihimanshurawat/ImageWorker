@@ -56,7 +56,7 @@ dependencyResolutionManagement {
 
 ```toml
 [versions]
-imageWorker = "1.3.0"
+imageWorker = "1.4.0"
 
 [libraries]
 imageworker = { module = "com.github.ihimanshurawat:ImageWorker", version.ref = "imageWorker" }
@@ -73,7 +73,7 @@ dependencies {
 
 ```kotlin
 dependencies {
-    implementation("com.github.ihimanshurawat:ImageWorker:1.3.0")
+    implementation("com.github.ihimanshurawat:ImageWorker:1.4.0")
 }
 ```
 
@@ -81,7 +81,7 @@ dependencies {
 
 ```groovy
 dependencies {
-    implementation 'com.github.ihimanshurawat:ImageWorker:1.3.0'
+    implementation 'com.github.ihimanshurawat:ImageWorker:1.4.0'
 }
 ```
 
@@ -167,6 +167,62 @@ val drawable: Drawable? = converter.base64ToDrawable(base64String)
 // Drawable conversions
 val bitmap: Bitmap? = converter.drawableToBitmap(drawable)
 val base64String: String? = converter.drawableToBase64(drawable)
+```
+
+---
+
+### 5. MediaStore & Gallery Integration (Android 10+ Scoped Storage)
+
+Save directly into the device's public **MediaStore** (`Pictures/<directory>/<subDirectory>`) so pictures immediately appear in system Gallery apps (Samsung Gallery, Google Photos) without requiring runtime storage permissions on Android 10+ (API 29+):
+
+```kotlin
+// Save Bitmap, Drawable, or Base64 into the public Gallery
+val mediaStoreUri: Uri? = ImageWorker.to(context)
+    .directory("Anime Wallpapers")
+    .subDirectory("Naruto")
+    .setFileName("wallpaper_101")
+    .withExtension(Extension.JPEG)
+    .saveToGallery(drawable = wallpaperDrawable, quality = 95, syncLocalCopy = true)
+
+// Check if image is present in Gallery
+val inGallery: Boolean = ImageWorker.from(context)
+    .directory("Anime Wallpapers")
+    .subDirectory("Naruto")
+    .setFileName("wallpaper_101")
+    .withExtension(Extension.JPEG)
+    .existsInGallery()
+
+// Get content Uri for intents (Set as wallpaper, Share chooser)
+val contentUri: Uri? = ImageWorker.from(context)
+    .directory("Anime Wallpapers")
+    .subDirectory("Naruto")
+    .setFileName("wallpaper_101")
+    .withExtension(Extension.JPEG)
+    .getGalleryUri()
+
+// Load Bitmap directly from MediaStore
+val bitmap: Bitmap? = ImageWorker.from(context)
+    .directory("Anime Wallpapers")
+    .subDirectory("Naruto")
+    .setFileName("wallpaper_101")
+    .withExtension(Extension.JPEG)
+    .loadFromGallery()
+
+// Delete from Gallery and local cache
+val isDeleted: Boolean = ImageWorker.from(context)
+    .directory("Anime Wallpapers")
+    .subDirectory("Naruto")
+    .setFileName("wallpaper_101")
+    .withExtension(Extension.JPEG)
+    .deleteFromGallery()
+
+// Get app-specific local File handle
+val localFile: File = ImageWorker.from(context)
+    .directory("Anime Wallpapers")
+    .subDirectory("Naruto")
+    .setFileName("wallpaper_101")
+    .withExtension(Extension.JPEG)
+    .getFile()
 ```
 
 ---
